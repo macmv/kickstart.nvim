@@ -90,6 +90,9 @@ P.S. You can delete this when you're done too. It's your config now! :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 -- Set to true if you have a Nerd Font installed
 vim.g.have_nerd_font = false
 
@@ -227,6 +230,40 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  {
+    'ggandor/leap.nvim',
+    config = function(self, opts)
+      require('leap').create_default_mappings()
+    end,
+  },
+
+  {
+    'nvim-tree/nvim-tree.lua',
+    version = '*',
+    lazy = false,
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function()
+      local function ntree_on_attach(bufnr)
+        local api = require 'nvim-tree.api'
+        local function opts(desc)
+          return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+        end
+
+        -- default mappings
+        api.config.mappings.default_on_attach(bufnr)
+
+        -- custom mappings
+        vim.keymap.set('n', '<leader>t', api.tree.toggle, { desc = 'Toggle File Tree' })
+        -- vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
+      end
+      require('nvim-tree').setup {
+        view = { adaptive_size = true },
+        on_attach = ntree_on_attach,
+      }
+    end,
+  },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -238,8 +275,8 @@ require('lazy').setup({
   --    require('Comment').setup({})
 
   -- "gc" to comment visual regions/lines
+  --
   { 'numToStr/Comment.nvim', opts = {} },
-
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following lua:
   --    require('gitsigns').setup({ ... })
@@ -353,6 +390,10 @@ require('lazy').setup({
         --   },
         -- },
         -- pickers = {}
+        defaults = {
+          layout_strategy = 'horizontal',
+          layout_config = { height = 0.95 },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -541,7 +582,7 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        -- pyright = {},
+        pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -687,6 +728,7 @@ require('lazy').setup({
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
           ['<C-y>'] = cmp.mapping.confirm { select = true },
+          ['<CR>'] = cmp.mapping.confirm { select = true },
 
           -- Manually trigger a completion from nvim-cmp.
           --  Generally you don't need this, because nvim-cmp will display
@@ -761,7 +803,7 @@ require('lazy').setup({
       -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
+      -- require('mini.surround').setup()
 
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
@@ -811,6 +853,166 @@ require('lazy').setup({
       --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
       --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
       --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+    end,
+  },
+  {
+    'NeogitOrg/neogit',
+    dependencies = {
+      'nvim-lua/plenary.nvim', -- required
+      'sindrets/diffview.nvim', -- optional - Diff integration
+
+      -- Only one of these is needed, not both.
+      'nvim-telescope/telescope.nvim', -- optional
+      'ibhagwan/fzf-lua', -- optional
+    },
+    config = true,
+  },
+  {
+    'scalameta/nvim-metals',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      {
+        'j-hui/fidget.nvim',
+        opts = {},
+      },
+      {
+        'mfussenegger/nvim-dap',
+        config = function(self, opts)
+          -- Debug settings if you're using nvim-dap
+          local dap = require 'dap'
+
+          dap.configurations.scala = {
+            {
+              type = 'scala',
+              request = 'launch',
+              name = 'RunOrTest',
+              metals = {
+                runType = 'runOrTestFile',
+                --args = { "firstArg", "secondArg", "thirdArg" }, -- here just as an example
+              },
+            },
+            {
+              type = 'scala',
+              request = 'launch',
+              name = 'Test Target',
+              metals = {
+                runType = 'testTarget',
+              },
+            },
+          }
+        end,
+      },
+    },
+    ft = { 'scala', 'sbt', 'java' },
+    opts = function()
+      local metals_config = require('metals').bare_config()
+
+      -- Example of settings
+      metals_config.settings = {
+        showImplicitArguments = true,
+        excludedPackages = { 'akka.actor.typed.javadsl', 'com.github.swagger.akka.javadsl' },
+      }
+
+      -- *READ THIS*
+      -- I *highly* recommend setting statusBarProvider to either "off" or "on"
+      --
+      -- "off" will enable LSP progress notifications by Metals and you'll need
+      -- to ensure you have a plugin like fidget.nvim installed to handle them.
+      --
+      -- "on" will enable the custom Metals status extension and you *have* to have
+      -- a have settings to capture this in your statusline or else you'll not see
+      -- any messages from metals. There is more info in the help docs about this
+      metals_config.init_options.statusBarProvider = 'off'
+
+      -- Example if you are using cmp how to make sure the correct capabilities for snippets are set
+      metals_config.capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+      metals_config.on_attach = function(client, bufnr)
+        require('metals').setup_dap()
+
+        -- LSP mappings
+        vim.keymap.set('n', 'gD', vim.lsp.buf.definition)
+        vim.keymap.set('n', 'K', vim.lsp.buf.hover)
+        vim.keymap.set('n', 'gi', vim.lsp.buf.implementation)
+        vim.keymap.set('n', 'gr', vim.lsp.buf.references)
+        vim.keymap.set('n', 'gds', vim.lsp.buf.document_symbol)
+        vim.keymap.set('n', 'gws', vim.lsp.buf.workspace_symbol)
+        vim.keymap.set('n', '<leader>cl', vim.lsp.codelens.run)
+        vim.keymap.set('n', '<leader>sh', vim.lsp.buf.signature_help)
+        vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename)
+        vim.keymap.set('n', '<leader>f', vim.lsp.buf.format)
+        vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action)
+
+        vim.keymap.set('n', '<leader>ws', function()
+          require('metals').hover_worksheet()
+        end)
+
+        -- all workspace diagnostics
+        vim.keymap.set('n', '<leader>aa', vim.diagnostic.setqflist)
+
+        -- all workspace errors
+        vim.keymap.set('n', '<leader>ae', function()
+          vim.diagnostic.setqflist { severity = 'E' }
+        end)
+
+        -- all workspace warnings
+        vim.keymap.set('n', '<leader>aw', function()
+          vim.diagnostic.setqflist { severity = 'W' }
+        end)
+
+        -- buffer diagnostics only
+        vim.keymap.set('n', '<leader>d', vim.diagnostic.setloclist)
+
+        vim.keymap.set('n', '[c', function()
+          vim.diagnostic.goto_prev { wrap = false }
+        end)
+
+        vim.keymap.set('n', ']c', function()
+          vim.diagnostic.goto_next { wrap = false }
+        end)
+
+        -- Example vim.keymap.setpings for usage with nvim-dap. If you don't use that, you can
+        -- skip these
+        vim.keymap.set('n', '<leader>dc', function()
+          require('dap').continue()
+        end)
+
+        vim.keymap.set('n', '<leader>dr', function()
+          require('dap').repl.toggle()
+        end)
+
+        vim.keymap.set('n', '<leader>dK', function()
+          require('dap.ui.widgets').hover()
+        end)
+
+        vim.keymap.set('n', '<leader>dt', function()
+          require('dap').toggle_breakpoint()
+        end)
+
+        vim.keymap.set('n', '<leader>dso', function()
+          require('dap').step_over()
+        end)
+
+        vim.keymap.set('n', '<leader>dsi', function()
+          require('dap').step_into()
+        end)
+
+        vim.keymap.set('n', '<leader>dl', function()
+          require('dap').run_last()
+        end)
+      end
+
+      return metals_config
+    end,
+    config = function(self, metals_config)
+      local nvim_metals_group = vim.api.nvim_create_augroup('nvim-metals', { clear = true })
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = self.ft,
+        callback = function()
+          require('metals').initialize_or_attach(metals_config)
+        end,
+        group = nvim_metals_group,
+      })
     end,
   },
 
