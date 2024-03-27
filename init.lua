@@ -278,6 +278,10 @@ require('lazy').setup({
       require('nvim-tree').setup {
         view = { adaptive_size = true },
         on_attach = ntree_on_attach,
+
+        update_focused_file = {
+          enable = true,
+        },
       }
     end,
   },
