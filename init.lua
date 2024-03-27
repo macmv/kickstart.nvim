@@ -512,6 +512,29 @@ require('lazy').setup({
 
           -- Find references for the word under your cursor.
           map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+          -- TODO: vim.lsp.buf.references
+
+          -- TODO:
+          -- vim.keymap.set('n', 'gds', vim.lsp.buf.document_symbol)
+          -- vim.keymap.set('n', 'gi', vim.lsp.buf.implementation)
+          -- vim.keymap.set('n', 'gws', vim.lsp.buf.workspace_symbol)
+          -- vim.keymap.set('n', '<leader>cl', vim.lsp.codelens.run)
+          -- vim.keymap.set('n', '<leader>sh', vim.lsp.buf.signature_help)
+          -- vim.keymap.set('n', '<leader>f', vim.lsp.buf.format)
+          vim.keymap.set('n', '<leader>aa', vim.diagnostic.setqflist)
+
+          -- TODO: all workspace errors
+          -- vim.keymap.set('n', '<leader>ae', function()
+          --   vim.diagnostic.setqflist { severity = 'E' }
+          -- end)
+
+          -- all workspace warnings
+          -- vim.keymap.set('n', '<leader>aw', function()
+          --   vim.diagnostic.setqflist { severity = 'W' }
+          -- end)
+
+          -- buffer diagnostics only
+          -- vim.keymap.set('n', '<leader>d', vim.diagnostic.setloclist)
 
           -- Jump to the implementation of the word under your cursor.
           --  Useful when your language has ways of declaring types without an actual implementation.
@@ -545,6 +568,14 @@ require('lazy').setup({
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+
+          map('[g', function()
+            vim.diagnostic.goto_prev { wrap = false }
+          end, 'Goto previous diagnostic')
+
+          map(']g', function()
+            vim.diagnostic.goto_next { wrap = false }
+          end, 'Goto next diagnostic')
 
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
@@ -940,45 +971,9 @@ require('lazy').setup({
       metals_config.on_attach = function(client, bufnr)
         require('metals').setup_dap()
 
-        -- LSP mappings
-        vim.keymap.set('n', 'gD', vim.lsp.buf.definition)
-        vim.keymap.set('n', 'K', vim.lsp.buf.hover)
-        vim.keymap.set('n', 'gi', vim.lsp.buf.implementation)
-        vim.keymap.set('n', 'gr', vim.lsp.buf.references)
-        vim.keymap.set('n', 'gds', vim.lsp.buf.document_symbol)
-        vim.keymap.set('n', 'gws', vim.lsp.buf.workspace_symbol)
-        vim.keymap.set('n', '<leader>cl', vim.lsp.codelens.run)
-        vim.keymap.set('n', '<leader>sh', vim.lsp.buf.signature_help)
-        vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename)
-        vim.keymap.set('n', '<leader>f', vim.lsp.buf.format)
-        vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action)
-
+        -- metals mappings
         vim.keymap.set('n', '<leader>ws', function()
           require('metals').hover_worksheet()
-        end)
-
-        -- all workspace diagnostics
-        vim.keymap.set('n', '<leader>aa', vim.diagnostic.setqflist)
-
-        -- all workspace errors
-        vim.keymap.set('n', '<leader>ae', function()
-          vim.diagnostic.setqflist { severity = 'E' }
-        end)
-
-        -- all workspace warnings
-        vim.keymap.set('n', '<leader>aw', function()
-          vim.diagnostic.setqflist { severity = 'W' }
-        end)
-
-        -- buffer diagnostics only
-        vim.keymap.set('n', '<leader>d', vim.diagnostic.setloclist)
-
-        vim.keymap.set('n', '[c', function()
-          vim.diagnostic.goto_prev { wrap = false }
-        end)
-
-        vim.keymap.set('n', ']c', function()
-          vim.diagnostic.goto_next { wrap = false }
         end)
 
         -- Example vim.keymap.setpings for usage with nvim-dap. If you don't use that, you can
