@@ -169,7 +169,7 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
+-- vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
@@ -263,6 +263,9 @@ require('lazy').setup({
       'nvim-tree/nvim-web-devicons',
     },
     config = function()
+      local api1 = require 'nvim-tree.api'
+      vim.keymap.set('n', '<leader>e', api1.tree.toggle, { desc = 'Toggle File Tree' })
+
       local function ntree_on_attach(bufnr)
         local api = require 'nvim-tree.api'
         local function opts(desc)
@@ -271,10 +274,6 @@ require('lazy').setup({
 
         -- default mappings
         api.config.mappings.default_on_attach(bufnr)
-
-        -- custom mappings
-        vim.keymap.set('n', '<leader>e', api.tree.toggle, { desc = 'Toggle File Tree' })
-        -- vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       end
       require('nvim-tree').setup {
         view = { adaptive_size = true },
