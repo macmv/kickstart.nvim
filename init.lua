@@ -913,6 +913,13 @@ require('lazy').setup({
         excludedPackages = { 'akka.actor.typed.javadsl', 'com.github.swagger.akka.javadsl' },
       }
 
+      local current_buffer = vim.api.nvim_buf_get_name(0)
+      local depth = 1
+      if current_buffer:match '^/home/macmv/Desktop/programming/fauna/core.*' then
+        depth = 2
+      end
+      metals_config.find_root_dir_max_project_nesting = depth
+
       -- *READ THIS*
       -- I *highly* recommend setting statusBarProvider to either "off" or "on"
       --
