@@ -255,7 +255,7 @@ require('lazy').setup({
         api.config.mappings.default_on_attach(bufnr)
 
         -- custom mappings
-        vim.keymap.set('n', '<leader>t', api.tree.toggle, { desc = 'Toggle File Tree' })
+        vim.keymap.set('n', '<leader>e', api.tree.toggle, { desc = 'Toggle File Tree' })
         -- vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       end
       require('nvim-tree').setup {
