@@ -695,22 +695,46 @@ require('lazy').setup({
 
   { -- Autoformat
     'stevearc/conform.nvim',
-    opts = {
-      notify_on_error = false,
-      format_on_save = {
-        timeout_ms = 500,
-        lsp_fallback = true,
-      },
-      formatters_by_ft = {
-        lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use a sub-list to tell conform to run *until* a formatter
-        -- is found.
-        -- javascript = { { "prettierd", "prettier" } },
-      },
-    },
+    config = function()
+      require('conform').setup {
+        notify_on_error = false,
+        formatters_by_ft = {
+          lua = { 'stylua' },
+          -- Conform can also run multiple formatters sequentially
+          -- python = { "isort", "black" },
+          --
+          -- You can use a sub-list to tell conform to run *until* a formatter
+          -- is found.
+          -- javascript = { { "prettierd", "prettier" } },
+        },
+      }
+
+      -- FIXME: I'd like to use `vim.g.` here, but it doesn't seem to work.
+      ConformOnSave = true
+
+      vim.keymap.set('n', '<F5>', function()
+        if ConformOnSave then
+          ConformOnSave = false
+          print 'Disabled format on save'
+        else
+          ConformOnSave = true
+          print 'Enabled format on save'
+        end
+      end)
+
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        pattern = '*',
+        callback = function(args)
+          if ConformOnSave then
+            require('conform').format {
+              bufnr = args.buf,
+              timeout_ms = 500,
+              lsp_fallback = true,
+            }
+          end
+        end,
+      })
+    end,
   },
 
   { -- Autocompletion
