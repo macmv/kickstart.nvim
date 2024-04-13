@@ -980,7 +980,7 @@ require('lazy').setup({
         end,
       },
     },
-    ft = { 'scala', 'sbt', 'java' },
+    ft = { 'scala', 'sbt' },
     opts = function()
       local metals_config = require('metals').bare_config()
 
@@ -1061,6 +1061,17 @@ require('lazy').setup({
         end,
         group = nvim_metals_group,
       })
+    end,
+  },
+
+  {
+    'mfussenegger/nvim-jdtls',
+    ft = { 'scala', 'sbt' },
+    opts = function()
+      local config = {
+        root_dir = vim.fs.dirname(vim.fs.find({ 'gradlew', '.git' }, { upward = true })[1]),
+      }
+      require('jdtls').start_or_attach(config)
     end,
   },
 
