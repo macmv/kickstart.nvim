@@ -96,6 +96,9 @@ vim.g.loaded_netrwPlugin = 1
 -- Set to true if you have a Nerd Font installed
 vim.g.have_nerd_font = true
 
+-- 2 spaces is the best spaces.
+vim.opt.tabstop = 2
+
 -- [[ Setting options ]]
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
