@@ -212,6 +212,28 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
+  pattern = '*.rbr',
+  callback = function()
+    local buf = vim.api.nvim_get_current_buf()
+    vim.api.nvim_buf_set_option(buf, 'filetype', 'rebar')
+  end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'rebar' },
+  callback = function()
+    -- vim.lsp.start {
+    --   name = 'relsp',
+    --   -- TODO
+    --   cmd = {
+    --     '/home/macmv/Desktop/programming/rust/rebar'
+    --   },
+    -- }
+  end,
+  group = vim.api.nvim_create_augroup('nvim-rebar', { clear = true }),
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
