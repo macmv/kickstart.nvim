@@ -646,7 +646,14 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        tsserver = {},
+        tsserver = {
+          capabilities = {
+            textDocument = {
+              formatting = false,
+              rangeFormatting = false,
+            },
+          },
+        },
         --
 
         lua_ls = {
@@ -705,10 +712,8 @@ require('lazy').setup({
           lua = { 'stylua' },
           -- Conform can also run multiple formatters sequentially
           -- python = { "isort", "black" },
-          --
-          -- You can use a sub-list to tell conform to run *until* a formatter
-          -- is found.
-          -- javascript = { { "prettierd", "prettier" } },
+          typescript = { 'prettierd' },
+          typescriptreact = { 'prettierd' },
         },
       }
 
