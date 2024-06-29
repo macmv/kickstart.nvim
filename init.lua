@@ -223,13 +223,13 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'rebar' },
   callback = function()
-    -- vim.lsp.start {
-    --   name = 'relsp',
-    --   -- TODO
-    --   cmd = {
-    --     '/home/macmv/Desktop/programming/rust/rebar'
-    --   },
-    -- }
+    vim.lsp.start {
+      name = 'relsp',
+      -- TODO
+      cmd = {
+        '/home/macmv/Desktop/programming/rust/rebar/target/debug/relsp',
+      },
+    }
   end,
   group = vim.api.nvim_create_augroup('nvim-rebar', { clear = true }),
 })
@@ -736,6 +736,14 @@ require('lazy').setup({
           -- python = { "isort", "black" },
           typescript = { 'prettierd' },
           typescriptreact = { 'prettierd' },
+          rebar = { 'rebar' },
+        },
+        formatters = {
+          rebar = {
+            command = '/home/macmv/Desktop/programming/rust/rebar/target/debug/refmt',
+            args = { '--stdin' },
+            stdin = true,
+          },
         },
       }
 
