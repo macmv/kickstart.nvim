@@ -100,6 +100,9 @@ vim.g.have_nerd_font = true
 vim.opt.tabstop = 2
 vim.opt.expandtab = true
 
+-- go away
+vim.opt.swapfile = false
+
 -- [[ Setting options ]]
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
