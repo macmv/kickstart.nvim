@@ -98,6 +98,7 @@ vim.g.have_nerd_font = true
 
 -- 2 spaces is the best spaces.
 vim.opt.tabstop = 2
+vim.opt.expandtab = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
