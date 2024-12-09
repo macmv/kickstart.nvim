@@ -362,15 +362,24 @@ require('lazy').setup({
   -- See `:help gitsigns` to understand what the configuration keys do
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
-    opts = {
-      signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
-      },
-    },
+    config = function()
+      vim.keymap.set('n', '[c', function()
+        require('gitsigns').prev_hunk { wrap = false }
+      end)
+      vim.keymap.set('n', ']c', function()
+        require('gitsigns').next_hunk { wrap = false }
+      end)
+
+      require('gitsigns').setup {
+        signs = {
+          add = { text = '+' },
+          change = { text = '~' },
+          delete = { text = '_' },
+          topdelete = { text = '‾' },
+          changedelete = { text = '~' },
+        },
+      }
+    end,
   },
 
   -- NOTE: Plugins can specify dependencies.
