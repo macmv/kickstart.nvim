@@ -750,7 +750,7 @@ require('lazy').setup({
         formatters = {
           rebar = {
             command = '/home/macmv/Desktop/programming/rust/rebar/target/debug/refmt',
-            args = { '--stdin' },
+            args = { '-' },
             stdin = true,
           },
         },
