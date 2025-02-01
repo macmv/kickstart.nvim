@@ -1143,6 +1143,13 @@ require('lazy').setup({
         root_dir = vim.fs.dirname(vim.fs.find({ 'gradlew', '.git' }, { upward = true })[1]),
       }
 
+      vim.api.nvim_create_autocmd('BufRead', {
+        pattern = { '*.java' },
+        callback = function()
+          require('jdtls').start_or_attach(config)
+        end,
+      })
+
       require('jdtls').start_or_attach(config)
     end,
   },
