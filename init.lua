@@ -673,7 +673,7 @@ require('lazy').setup({
         clangd = {},
         gopls = {},
         pyright = {},
-        -- rust_analyzer = {},
+        rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -730,6 +730,18 @@ require('lazy').setup({
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for tsserver)
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+
+            if server_name == 'rust_analyzer' then
+              local path = vim.fn.getcwd() .. '/.rust-analyzer.lua'
+              local file = io.open(path, 'r')
+              if file ~= nil then
+                file:close()
+
+                local config = loadfile(path)()
+                server.settings = { ['rust-analyzer'] = config }
+              end
+            end
+
             require('lspconfig')[server_name].setup(server)
           end,
         },
