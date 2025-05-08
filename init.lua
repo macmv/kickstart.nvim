@@ -780,8 +780,14 @@ require('lazy').setup({
           typescript = { 'prettierd' },
           typescriptreact = { 'prettierd' },
           rebar = { 'rebar' },
+          jsonnet = { 'jsonnetfmt' },
         },
         formatters = {
+          jsonnetfmt = {
+            command = 'jsonnetfmt',
+            args = { '--string-style', 'd', '-' },
+            stdin = true,
+          },
           rebar = {
             command = '/home/macmv/Desktop/programming/rust/rebar/target/debug/refmt',
             args = { '-' },
