@@ -354,6 +354,10 @@ require('lazy').setup({
         update_focused_file = {
           enable = true,
         },
+
+        diagnostics = {
+          enable = true,
+        },
       }
     end,
   },
