@@ -241,6 +241,28 @@ vim.api.nvim_create_autocmd('FileType', {
   group = vim.api.nvim_create_augroup('nvim-rebar', { clear = true }),
 })
 
+vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
+  pattern = '*/resources/assets/*.json',
+  callback = function()
+    local buf = vim.api.nvim_get_current_buf()
+    vim.api.nvim_buf_set_option(buf, 'filetype', 'mc-model')
+  end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'mc-model' },
+  callback = function()
+    vim.lsp.start {
+      name = 'mc-lsp',
+      -- TODO
+      cmd = {
+        '/home/macmv/Desktop/programming/rust/mclsp/target/release/mc-lsp',
+      },
+    }
+  end,
+  group = vim.api.nvim_create_augroup('nvim-rebar', { clear = true }),
+})
+
 -- add fql support
 vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   pattern = '*.fql',
