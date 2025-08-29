@@ -789,6 +789,10 @@ require('lazy').setup({
           end,
         },
       }
+
+      require('lspconfig').dartls.setup {
+        cmd = { 'dart', 'language-server', '--protocol=lsp' },
+      }
     end,
   },
 
