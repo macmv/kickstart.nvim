@@ -1185,6 +1185,48 @@ require('lazy').setup({
     end,
   },
 
+  {
+    'HiPhish/rainbow-delimiters.nvim',
+    opts = {
+      strategy = {
+        [''] = 'rainbow-delimiters.strategy.global',
+        vim = 'rainbow-delimiters.strategy.local',
+      },
+      query = {
+        [''] = 'rainbow-delimiters',
+        lua = 'rainbow-blocks',
+      },
+      priority = {
+        [''] = 110,
+        lua = 210,
+      },
+      highlight = {
+        'RainbowDelimiterRedDim',
+        'RainbowDelimiterOrangeDim',
+        'RainbowDelimiterYellowDim',
+        'RainbowDelimiterGreenDim',
+        'RainbowDelimiterCyanDim',
+        'RainbowDelimiterBlueDim',
+        'RainbowDelimiterVioletDim',
+      },
+    },
+    config = function(_, opts)
+      local function hl(name, color)
+        vim.api.nvim_set_hl(0, name, { fg = color, bg = 'NONE' })
+      end
+
+      hl('RainbowDelimiterRedDim', '#af9198')
+      hl('RainbowDelimiterOrangeDim', '#ae9485')
+      hl('RainbowDelimiterYellowDim', '#a49980')
+      hl('RainbowDelimiterGreenDim', '#8da18b')
+      hl('RainbowDelimiterCyanDim', '#81a29c')
+      hl('RainbowDelimiterBlueDim', '#8d9bb2')
+      hl('RainbowDelimiterVioletDim', '#9f95ad')
+
+      require('rainbow-delimiters.setup').setup(opts)
+    end,
+  },
+
   -- {
   --   'mfussenegger/nvim-jdtls',
   --   ft = { 'java' },
