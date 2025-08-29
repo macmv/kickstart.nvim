@@ -715,6 +715,7 @@ require('lazy').setup({
         gopls = {},
         pyright = {},
         rust_analyzer = {},
+        terraformls = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -760,6 +761,7 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format lua code
+        'terraform', -- Format terraform files
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -803,6 +805,7 @@ require('lazy').setup({
           typescriptreact = { 'prettierd' },
           rebar = { 'rebar' },
           jsonnet = { 'jsonnetfmt' },
+          terraform = { 'terraform' },
         },
         formatters = {
           jsonnetfmt = {
@@ -813,6 +816,11 @@ require('lazy').setup({
           rebar = {
             command = '/home/macmv/Desktop/programming/rust/rebar/target/debug/refmt',
             args = { '-' },
+            stdin = true,
+          },
+          terraform = {
+            command = 'terraform',
+            args = { 'fmt', '-' },
             stdin = true,
           },
         },
