@@ -1338,5 +1338,19 @@ vim.api.nvim_create_autocmd('BufRead', {
   end,
 })
 
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'bluedb' },
+  callback = function()
+    vim.lsp.start {
+      name = 'blue-lsp',
+      -- TODO
+      cmd = {
+        '/home/macmv/Desktop/programming/rust/blue-metrics/database/target/debug/blue-lsp',
+      },
+    }
+  end,
+  group = vim.api.nvim_create_augroup('nvim-blue-lsp', { clear = true }),
+})
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
