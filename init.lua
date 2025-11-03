@@ -528,21 +528,32 @@ require('lazy').setup({
     end,
   },
 
+  -- LSP Plugins
+  {
+    -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
+    -- used for completion, annotations and signatures of Neovim apis
+    'folke/lazydev.nvim',
+    ft = 'lua',
+    opts = {
+      library = {
+        -- Load luvit types when the `vim.uv` word is found
+        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+      },
+    },
+  },
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for neovim
-      'williamboman/mason.nvim',
-      'williamboman/mason-lspconfig.nvim',
+      { 'mason-org/mason.nvim', opts = {} },
+      'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
-      -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { 'j-hui/fidget.nvim', opts = {} },
 
-      -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
-      -- used for completion, annotations and signatures of Neovim apis
-      { 'folke/neodev.nvim', opts = {} },
+      -- Allows extra capabilities provided by blink.cmp
+      'saghen/blink.cmp',
     },
     config = function()
       -- Brief Aside: **What is LSP?**
@@ -653,11 +664,11 @@ require('lazy').setup({
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
           map('[g', function()
-            vim.diagnostic.goto_prev()
+            vim.diagnostic.jump { count = -1, float = true }
           end, 'Goto previous diagnostic')
 
           map(']g', function()
-            vim.diagnostic.goto_next()
+            vim.diagnostic.jump { count = 1, float = true }
           end, 'Goto next diagnostic')
 
           -- The following two autocommands are used to highlight references of the
@@ -696,43 +707,21 @@ require('lazy').setup({
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-      local servers = {
-        clangd = {},
-        gopls = {},
-        pyright = {},
-        rust_analyzer = {},
-        terraformls = {},
-        -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-        --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`tsserver`) will work just fine
-        -- tsserver = {
-        --   capabilities = {
-        --     textDocument = {
-        --       formatting = false,
-        --       rangeFormatting = false,
-        --     },
-        --   },
-        -- },
-        --
-
-        lua_ls = {
-          -- cmd = {...},
-          -- filetypes { ...},
-          -- capabilities = {},
-          settings = {
-            Lua = {
-              completion = {
-                callSnippet = 'Replace',
-              },
-              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
+      vim.lsp.config('clangd', {})
+      vim.lsp.config('gopls', {})
+      vim.lsp.config('pyright', {})
+      vim.lsp.config('rust_analyzer', {})
+      vim.lsp.config('lua_ls', {
+        settings = {
+          Lua = {
+            completion = {
+              callSnippet = 'Replace',
             },
+            -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+            -- diagnostics = { disable = { 'missing-fields' } },
           },
         },
-      }
+      })
 
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
@@ -754,11 +743,12 @@ require('lazy').setup({
       require('mason-lspconfig').setup {
         handlers = {
           function(server_name)
+            local config = vim.lsp.config[server_name]
             local server = servers[server_name] or {}
             -- This handles overriding only values explicitly passed
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for tsserver)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+            config.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
 
             if server_name == 'rust_analyzer' then
               local path = vim.fn.getcwd() .. '/.rust-analyzer.lua'
@@ -766,31 +756,24 @@ require('lazy').setup({
               if file ~= nil then
                 file:close()
 
-                local config = loadfile(path)()
-                server.settings = { ['rust-analyzer'] = config }
+                config.settings = { ['rust-analyzer'] = loadfile(path)() }
               end
             end
-
-            require('lspconfig')[server_name].setup(server)
           end,
         },
       }
 
-      require('lspconfig.configs').relsp = {
-        default_config = {
-          filetypes = { 'rebar' },
-          cmd = { '/home/macmv/Desktop/programming/rust/rebar/target/release/relsp' },
-          root_dir = function(fname)
-            local util = require 'lspconfig.util'
-            return util.root_pattern '.git'(fname) or util.path.dirname(fname)
-          end,
-        },
-      }
-      require('lspconfig').relsp.setup {
+      vim.lsp.config('relsp', {
         capabilities = capabilities,
-      }
+        filetypes = { 'rebar' },
+        cmd = { '/home/macmv/Desktop/programming/rust/rebar/target/release/relsp' },
+        root_dir = function(fname)
+          local util = require 'lspconfig.util'
+          return util.root_pattern '.git'(fname) or util.path.dirname(fname)
+        end,
+      })
 
-      require('lspconfig').dartls.setup {
+      vim.lsp.config('dartls', {
         flags = {
           allow_incremental_sync = false,
         },
@@ -798,7 +781,7 @@ require('lazy').setup({
           client.server_capabilities.semanticTokensProvider = nil
         end,
         cmd = { 'dart', 'language-server', '--protocol=lsp' },
-      }
+      })
     end,
   },
 
