@@ -770,7 +770,7 @@ require('lazy').setup({
         cmd = { '/home/macmv/Desktop/programming/rust/rebar/target/release/relsp' },
         root_dir = function(fname)
           local util = require 'lspconfig.util'
-          return util.root_pattern '.git'(fname) or util.path.dirname(fname)
+          return util.root_pattern '.git'(fname) or vim.fs.dirname(fname)
         end,
       })
 
