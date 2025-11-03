@@ -227,20 +227,6 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   end,
 })
 
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'rebar' },
-  callback = function()
-    vim.lsp.start {
-      name = 'relsp',
-      -- TODO
-      cmd = {
-        '/home/macmv/Desktop/programming/rust/rebar/target/debug/relsp',
-      },
-    }
-  end,
-  group = vim.api.nvim_create_augroup('nvim-rebar', { clear = true }),
-})
-
 vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   pattern = '*/resources/assets/*.json',
   callback = function()
@@ -790,7 +776,27 @@ require('lazy').setup({
         },
       }
 
+      require('lspconfig.configs').relsp = {
+        default_config = {
+          filetypes = { 'rebar' },
+          cmd = { '/home/macmv/Desktop/programming/rust/rebar/target/release/relsp' },
+          root_dir = function(fname)
+            local util = require 'lspconfig.util'
+            return util.root_pattern '.git'(fname) or util.path.dirname(fname)
+          end,
+        },
+      }
+      require('lspconfig').relsp.setup {
+        capabilities = capabilities,
+      }
+
       require('lspconfig').dartls.setup {
+        flags = {
+          allow_incremental_sync = false,
+        },
+        on_attach = function(client, bufnr)
+          client.server_capabilities.semanticTokensProvider = nil
+        end,
         cmd = { 'dart', 'language-server', '--protocol=lsp' },
       }
     end,
@@ -818,7 +824,7 @@ require('lazy').setup({
             stdin = true,
           },
           rebar = {
-            command = '/home/macmv/Desktop/programming/rust/rebar/target/debug/refmt',
+            command = '/home/macmv/Desktop/programming/rust/rebar/target/release/refmt',
             args = { '-' },
             stdin = true,
           },

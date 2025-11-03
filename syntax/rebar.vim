@@ -10,7 +10,7 @@ endif
 syn match     rbrSigil        display contained /\w\+[ \n]/he=e-1,me=e-1
 syn match     rbrOperator     display "\%(+\|-\|*\|/\|%\|==\|!=\|>=\|<=\|>\|<\||\|&\)"
 
-syn keyword   rbrKeyword      let if else def
+syn keyword   rbrKeyword      let if else fn
 
 syn match     rbrModName      display "\%(\w\+\):"he=e-1,me=e-1
 syn match     rbrDefinition   display "\%(\w\+\)("he=e-1,me=e-1
@@ -23,13 +23,13 @@ syn keyword rbrTodo contained TODO FIXME XXX NB NOTE SAFETY
 
 hi def link rbrDecNumber       rbrNumber
 
-"hi def link rbrKeyword     Keyword
-"hi def link rbrDefinition  Function
-"hi def link rbrModName     Identifier
-"hi def link rbrNumber      Number
-"hi def link rbrOperator    Operator
-"hi def link rbrComment     Comment
-"hi def link rbrTodo        Todo
+hi def link rbrKeyword     Keyword
+hi def link rbrDefinition  Function
+hi def link rbrModName     Identifier
+hi def link rbrNumber      Number
+hi def link rbrOperator    Operator
+hi def link rbrComment     Comment
+hi def link rbrTodo        Todo
 
 syn sync minlines=200
 syn sync maxlines=500
