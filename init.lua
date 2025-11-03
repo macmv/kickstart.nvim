@@ -391,10 +391,11 @@ require('lazy').setup({
     'lewis6991/gitsigns.nvim',
     config = function()
       vim.keymap.set('n', '[c', function()
-        require('gitsigns').prev_hunk { wrap = false }
+        -- HOLY SHIT STOP CHANGING YOUR APIS!!!
+        require('gitsigns').nav_hunk('prev', { wrap = false })
       end)
       vim.keymap.set('n', ']c', function()
-        require('gitsigns').next_hunk { wrap = false }
+        require('gitsigns').nav_hunk('next', { wrap = false })
       end)
 
       require('gitsigns').setup {
