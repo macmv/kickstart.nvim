@@ -223,7 +223,7 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   pattern = '*.rbr',
   callback = function()
     local buf = vim.api.nvim_get_current_buf()
-    vim.api.nvim_buf_set_option(buf, 'filetype', 'rebar')
+    vim.api.nvim_set_option_value('filetype', 'rebar', { buf = buf })
   end,
 })
 
@@ -231,7 +231,7 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   pattern = '*/resources/assets/*.json',
   callback = function()
     local buf = vim.api.nvim_get_current_buf()
-    vim.api.nvim_buf_set_option(buf, 'filetype', 'mc-model')
+    vim.api.nvim_set_option_value('filetype', 'mc-model', { buf = buf })
   end,
 })
 
@@ -254,7 +254,7 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   pattern = '*.fql',
   callback = function()
     local buf = vim.api.nvim_get_current_buf()
-    vim.api.nvim_buf_set_option(buf, 'filetype', 'fql')
+    vim.api.nvim_set_option_value('filetype', 'fql', { buf = buf })
   end,
 })
 
@@ -262,7 +262,7 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   pattern = '*.fsl',
   callback = function()
     local buf = vim.api.nvim_get_current_buf()
-    vim.api.nvim_buf_set_option(buf, 'filetype', 'fsl')
+    vim.api.nvim_set_option_value('filetype', 'fsl', { buf = buf })
   end,
 })
 
@@ -270,7 +270,7 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   pattern = '*.ll',
   callback = function()
     local buf = vim.api.nvim_get_current_buf()
-    vim.api.nvim_buf_set_option(buf, 'filetype', 'llama')
+    vim.api.nvim_set_option_value('filetype', 'llama', { buf = buf })
   end,
 })
 
