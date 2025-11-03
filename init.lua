@@ -312,12 +312,12 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
-  {
-    'ggandor/leap.nvim',
-    config = function(self, opts)
-      require('leap').create_default_mappings()
-    end,
-  },
+  -- {
+  --   'ggandor/leap.nvim',
+  --   config = function(self, opts)
+  --     require('leap').create_default_mappings()
+  --   end,
+  -- },
 
   {
     'zbirenbaum/copilot.lua',
