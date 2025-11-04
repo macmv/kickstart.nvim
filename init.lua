@@ -695,11 +695,6 @@ require('lazy').setup({
         handlers = {
           function(server_name)
             local config = vim.lsp.config[server_name]
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for tsserver)
-            config.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
 
             if server_name == 'rust_analyzer' then
               local path = vim.fn.getcwd() .. '/.rust-analyzer.lua'
