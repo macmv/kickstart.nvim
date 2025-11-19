@@ -666,7 +666,15 @@ require('lazy').setup({
       vim.lsp.config('clangd', {})
       vim.lsp.config('gopls', {})
       vim.lsp.config('pyright', {})
-      vim.lsp.config('rust_analyzer', {})
+      vim.lsp.config('rust_analyzer', {
+        settings = {
+          ['rust-analyzer'] = {
+            diagnostics = {
+              disabled = { 'inactive-code' },
+            },
+          },
+        },
+      })
       vim.lsp.config('lua_ls', {
         settings = {
           Lua = {
