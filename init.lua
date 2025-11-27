@@ -666,15 +666,6 @@ require('lazy').setup({
       vim.lsp.config('clangd', {})
       vim.lsp.config('gopls', {})
       vim.lsp.config('pyright', {})
-      vim.lsp.config('rust_analyzer', {
-        settings = {
-          ['rust-analyzer'] = {
-            diagnostics = {
-              disabled = { 'inactive-code' },
-            },
-          },
-        },
-      })
       vim.lsp.config('lua_ls', {
         settings = {
           Lua = {
@@ -693,26 +684,20 @@ require('lazy').setup({
           'clangd',
           'gopls',
           'pyright',
-          'rust_analyzer',
           'lua_ls',
           'stylua',
         },
       }
 
       require('mason-lspconfig').setup {
+        automatic_enable = {
+          exclude = {
+            'rust_analyzer',
+          },
+        },
         handlers = {
           function(server_name)
             local config = vim.lsp.config[server_name]
-
-            if server_name == 'rust_analyzer' then
-              local path = vim.fn.getcwd() .. '/.rust-analyzer.lua'
-              local file = io.open(path, 'r')
-              if file ~= nil then
-                file:close()
-
-                config.settings = { ['rust-analyzer'] = loadfile(path)() }
-              end
-            end
           end,
         },
       }
@@ -1180,6 +1165,41 @@ require('lazy').setup({
   --     require('java').setup()
   --   end,
   -- },
+
+  {
+    'mrcjkb/rustaceanvim',
+    lazy = false, -- This is already lazy
+    init = function()
+      vim.g.rustaceanvim = {
+        tools = {},
+        server = {
+          on_attach = function(client, bufnr)
+            -- you can also put keymaps in here
+
+            -- TODO
+            -- local path = vim.fn.getcwd() .. '/.rust-analyzer.lua'
+            -- local file = io.open(path, 'r')
+            -- if file ~= nil then
+            --   file:close()
+
+            --   config.settings = { ['rust-analyzer'] = loadfile(path)() }
+            -- end
+          end,
+          default_settings = {
+            ['rust-analyzer'] = {
+              check = {
+                command = 'check',
+              },
+              diagnostics = {
+                disabled = { 'inactive-code' },
+              },
+            },
+          },
+        },
+        dap = {},
+      }
+    end,
+  },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
