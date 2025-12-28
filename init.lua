@@ -319,20 +319,25 @@ require('lazy').setup({
   --   end,
   -- },
 
+  -- {
+  --   'zbirenbaum/copilot.lua',
+  --   config = function()
+  --     require('copilot').setup {
+  --       suggestion = {
+  --         auto_trigger = true,
+  --         keymap = {
+  --           accept = '<C-l>',
+  --           prev = '<C-k>',
+  --           next = '<C-j>',
+  --         },
+  --       },
+  --     }
+  --   end,
+  -- },
+
   {
-    'zbirenbaum/copilot.lua',
-    config = function()
-      require('copilot').setup {
-        suggestion = {
-          auto_trigger = true,
-          keymap = {
-            accept = '<C-l>',
-            prev = '<C-k>',
-            next = '<C-j>',
-          },
-        },
-      }
-    end,
+    'Exafunction/windsurf.vim',
+    event = 'BufEnter',
   },
 
   {
