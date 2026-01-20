@@ -691,6 +691,7 @@ require('lazy').setup({
           'pyright',
           'lua_ls',
           'stylua',
+          'svelte-language-server',
         },
       }
 
