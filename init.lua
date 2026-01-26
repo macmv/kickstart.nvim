@@ -692,6 +692,7 @@ require('lazy').setup({
           'lua_ls',
           'stylua',
           'svelte-language-server',
+          'tinymist',
         },
       }
 
@@ -1205,6 +1206,13 @@ require('lazy').setup({
         dap = {},
       }
     end,
+  },
+
+  {
+    'chomosuke/typst-preview.nvim',
+    ft = 'typst',
+    version = '1.*',
+    opts = {}, -- lazy.nvim will implicitly calls `setup {}`
   },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
