@@ -667,11 +667,22 @@ require('lazy').setup({
 
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+      capabilities.workspace = capabilities.workspace or {}
+      capabilities.workspace.didChangeWatchedFiles = {
+        dynamicRegistration = true,
+      }
 
-      vim.lsp.config('clangd', {})
-      vim.lsp.config('gopls', {})
-      vim.lsp.config('pyright', {})
+      vim.lsp.config('clangd', {
+        capabilities = capabilities,
+      })
+      vim.lsp.config('gopls', {
+        capabilities = capabilities,
+      })
+      vim.lsp.config('pyright', {
+        capabilities = capabilities,
+      })
       vim.lsp.config('lua_ls', {
+        capabilities = capabilities,
         settings = {
           Lua = {
             completion = {
