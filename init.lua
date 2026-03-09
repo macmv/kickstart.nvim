@@ -506,7 +506,7 @@ require('lazy').setup({
       local builtin = require 'telescope.builtin'
       vim.keymap.set('n', '<leader>sf', builtin.find_files)
       vim.keymap.set('n', '<leader>st', builtin.treesitter)
-      vim.keymap.set('n', '<leader>sd', builtin.lsp_workspace_symbols)
+      vim.keymap.set('n', '<leader>sd', builtin.lsp_dynamic_workspace_symbols)
       -- vim.keymap.set('n', '<leader>sD', builtin.diagnostics)
 
       -- -- Slightly advanced example of overriding default behavior and theme
