@@ -368,7 +368,7 @@ require('lazy').setup({
         api.config.mappings.default_on_attach(bufnr)
       end
       require('nvim-tree').setup {
-        view = { adaptive_size = true },
+        view = { adaptive_size = true, width = { max = 40 } },
         on_attach = ntree_on_attach,
 
         update_focused_file = {
