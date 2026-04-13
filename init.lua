@@ -738,6 +738,18 @@ require('lazy').setup({
         end,
       })
 
+      vim.lsp.config('luau_lsp', {
+        capabilities = capabilities,
+        -- TODO: version hash in docs path will break on Roblox Studio updates
+        cmd = {
+          'luau-lsp',
+          'lsp',
+          '--definitions=' .. vim.fn.expand '~/.config/luau-lsp/globalTypes.d.luau',
+          '--docs=' .. vim.fn.expand '~/.local/share/vinegar/versions/version-4e0d6381db804162/content/api_docs/en-us.json',
+        },
+        filetypes = { 'luau' },
+      })
+
       vim.lsp.config('dartls', {
         flags = {
           allow_incremental_sync = false,
