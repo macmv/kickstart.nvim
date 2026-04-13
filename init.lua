@@ -995,7 +995,7 @@ require('lazy').setup({
 
   {
     'neovim-treesitter/nvim-treesitter',
-    dependencies = { 'nvim-lua/plenary.nvim' },
+    dependencies = { 'nvim-lua/plenary.nvim', 'neovim-treesitter/treesitter-parser-registry' },
     lazy = false,
     build = ':TSUpdate',
     config = function()
@@ -1005,9 +1005,9 @@ require('lazy').setup({
         pattern = { 'bash', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc' },
         callback = function()
           vim.treesitter.start()
-          vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-          vim.wo.foldmethod = 'expr'
-          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+          -- vim.wo.foldmethod = 'expr'
+          -- vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end,
       })
     end,
