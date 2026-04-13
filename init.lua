@@ -585,6 +585,7 @@ require('lazy').setup({
 
           -- map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
           map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+          map('gi', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
 
           map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
           -- TODO: vim.lsp.buf.references
