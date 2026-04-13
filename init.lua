@@ -342,7 +342,9 @@ require('lazy').setup({
 
   {
     'Exafunction/windsurf.vim',
-    event = 'BufEnter',
+    cond = function()
+      return vim.g.enable_windsurf ~= false
+    end,
   },
 
   {
