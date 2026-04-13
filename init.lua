@@ -349,24 +349,20 @@ require('lazy').setup({
 
   {
     'nvim-tree/nvim-tree.lua',
-    version = '*',
     lazy = false,
     dependencies = {
       'nvim-tree/nvim-web-devicons',
     },
     config = function()
-      local api1 = require 'nvim-tree.api'
-      vim.keymap.set('n', '<leader>e', api1.tree.toggle, { desc = 'Toggle File Tree' })
-
       local function ntree_on_attach(bufnr)
-        local api = require 'nvim-tree.api'
         local function opts(desc)
           return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
         end
 
         -- default mappings
-        api.config.mappings.default_on_attach(bufnr)
+        require('nvim-tree.api').map.on_attach.default(bufnr)
       end
+
       require('nvim-tree').setup {
         view = { adaptive_size = true, width = { max = 40 } },
         on_attach = ntree_on_attach,
@@ -379,6 +375,8 @@ require('lazy').setup({
           enable = true,
         },
       }
+
+      vim.keymap.set('n', '<leader>e', require('nvim-tree.api').tree.toggle, { desc = 'Toggle File Tree' })
     end,
   },
 
