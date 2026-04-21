@@ -996,10 +996,10 @@ require('lazy').setup({
     lazy = false,
     build = ':TSUpdate',
     config = function()
-      require('nvim-treesitter').install { 'bash', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc' }
+      require('nvim-treesitter').install { 'bash', 'c', 'ecma', 'html', 'javascript', 'lua', 'markdown', 'typescript', 'vim', 'vimdoc', 'svelte' }
 
       vim.api.nvim_create_autocmd('FileType', {
-        pattern = { 'bash', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc' },
+        pattern = { 'bash', 'c', 'html', 'javascript', 'lua', 'markdown', 'typescript', 'vim', 'vimdoc', 'svelte' },
         callback = function()
           vim.treesitter.start()
           -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
