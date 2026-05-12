@@ -1313,5 +1313,20 @@ vim.api.nvim_create_autocmd('FileType', {
   group = vim.api.nvim_create_augroup('nvim-blue-lsp', { clear = true }),
 })
 
+vim.keymap.set('n', '<leader>r', function()
+  -- find the terminal window
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    if vim.bo[buf].buftype == 'terminal' then
+      local chan = vim.b[buf].terminal_job_id
+      if chan then
+        -- send Up arrow + Enter
+        vim.api.nvim_chan_send(chan, '\x1b[A\n')
+      end
+      return
+    end
+  end
+end)
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
