@@ -991,8 +991,7 @@ require('lazy').setup({
   },
 
   {
-    'neovim-treesitter/nvim-treesitter',
-    dependencies = { 'nvim-lua/plenary.nvim', 'neovim-treesitter/treesitter-parser-registry' },
+    'nvim-treesitter/nvim-treesitter',
     lazy = false,
     build = ':TSUpdate',
     config = function()
