@@ -563,7 +563,7 @@ require('lazy').setup({
       { 'j-hui/fidget.nvim', opts = {} },
 
       -- Allows extra capabilities provided by blink.cmp
-      'saghen/blink.cmp',
+      { 'saghen/blink.cmp', dependencies = { 'saghen/blink.lib' } },
     },
     config = function()
       -- If you're wondering about lsp vs treesitter, you can check out the wonderfully
