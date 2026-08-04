@@ -19,6 +19,7 @@ syn region    rbrString             matchgroup=rbrStringDelimiter start=+b"+ ski
 syn region    rbrInterpolation      matchgroup=rbrInterpolationDelimiter start="#{" end="}" contained contains=TOP
 syn region    rbrString             matchgroup=rbrStringDelimiter start=+"+ skip=+\\\\\|\\"+ end=+"+ contains=rbrEscape,rbrEscapeUnicode,rbrEscapeError,rbrStringContinuation,rbrInterpolation,@Spell
 syn region    rbrString             matchgroup=rbrStringDelimiter start='b\?r\z(#*\)"' end='"\z1' contains=@Spell
+syn region    rbrChar               matchgroup=rbrCharDelimiter start=+'+ skip=+\\\\\|\\'+ end=+'+ contains=rbrEscape,rbrEscapeUnicode,rbrEscapeError
 
 syn match     rbrCharacterInvalid   display contained /b\?'\zs[\n\r\t']\ze'/
 syn match     rbrCharacterInvalidUnicode display contained /b'\zs[^[:cntrl:][:graph:]]\ze'/
@@ -49,6 +50,8 @@ hi def link rbrBoolean         Boolean
 hi def link rbrType            Type
 hi def link rbrString          String
 hi def link rbrStringDelimiter String
+hi def link rbrChar            Character
+hi def link rbrCharDelimiter   Character
 hi def link rbrEscape          Special
 hi def link rbrEscapeUnicode   rbrEscape
 hi def link rbrEscapeError             Error
