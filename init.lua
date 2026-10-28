@@ -347,6 +347,8 @@ require('lazy').setup({
     end,
   },
 
+  { 'kien/rainbow_parentheses.vim' },
+
   {
     'nvim-tree/nvim-tree.lua',
     lazy = false,
