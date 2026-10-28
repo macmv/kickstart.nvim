@@ -781,8 +781,8 @@ require('lazy').setup({
             stdin = true,
           },
           rebar = {
-            command = '/home/macmv/Desktop/programming/rust/rebar/target/release/refmt',
-            args = { '-' },
+            command = '/home/macmv/Desktop/programming/rebar/rebar/target/release/rebar',
+            args = { 'fmt', '-' },
             stdin = true,
           },
           terraform = {
