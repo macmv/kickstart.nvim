@@ -219,6 +219,19 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+vim.filetype.add { extension = { rhai = 'rhai' } }
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'rhai',
+  callback = function()
+    -- vim-sleuth guesses wrong on rhai files; stop it from re-running later
+    vim.b.sleuth_automatic = 0
+    vim.bo.shiftwidth = 2
+    vim.bo.tabstop = 2
+    vim.bo.softtabstop = 2
+    vim.bo.expandtab = true
+  end,
+})
+
 vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   pattern = '*.rbr',
   callback = function()
@@ -737,6 +750,14 @@ require('lazy').setup({
         end,
       })
 
+      vim.lsp.config('rhai', {
+        capabilities = capabilities,
+        filetypes = { 'rhai' },
+        cmd = { 'rhai', 'lsp', 'stdio' },
+        root_markers = { '.git' },
+      })
+      vim.lsp.enable 'rhai'
+
       vim.lsp.config('luau_lsp', {
         capabilities = capabilities,
         -- TODO: version hash in docs path will break on Roblox Studio updates
@@ -997,10 +1018,38 @@ require('lazy').setup({
     lazy = false,
     build = ':TSUpdate',
     config = function()
-      require('nvim-treesitter').install { 'bash', 'c', 'css', 'ecma', 'go', 'html', 'javascript', 'lua', 'markdown', 'typescript', 'vim', 'vimdoc', 'svelte' }
+      vim.api.nvim_create_autocmd('User', {
+        pattern = 'TSUpdate',
+        callback = function()
+          require('nvim-treesitter.parsers').rhai = {
+            install_info = {
+              url = 'https://github.com/elkowar/tree-sitter-rhai',
+              revision = '4ac7384d487ffcb54e746ef1569585a749370c5b',
+              queries = 'queries',
+            },
+          }
+        end,
+      })
+
+      require('nvim-treesitter').install {
+        'bash',
+        'c',
+        'css',
+        'ecma',
+        'go',
+        'html',
+        'javascript',
+        'lua',
+        'markdown',
+        'rhai',
+        'typescript',
+        'vim',
+        'vimdoc',
+        'svelte',
+      }
 
       vim.api.nvim_create_autocmd('FileType', {
-        pattern = { 'bash', 'c', 'css', 'go', 'html', 'javascript', 'lua', 'markdown', 'typescript', 'vim', 'vimdoc', 'svelte' },
+        pattern = { 'bash', 'c', 'css', 'go', 'html', 'javascript', 'lua', 'markdown', 'rhai', 'typescript', 'vim', 'vimdoc', 'svelte' },
         callback = function()
           vim.treesitter.start()
           -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
