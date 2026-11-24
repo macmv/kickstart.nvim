@@ -340,12 +340,12 @@ require('lazy').setup({
   --   end,
   -- },
 
-  {
-    'Exafunction/windsurf.vim',
-    cond = function()
-      return vim.g.enable_windsurf ~= false
-    end,
-  },
+  -- {
+  --   'Exafunction/windsurf.vim',
+  --   cond = function()
+  --     return vim.g.enable_windsurf ~= false
+  --   end,
+  -- },
 
   { 'kien/rainbow_parentheses.vim' },
 
